@@ -100,10 +100,12 @@ const HeroSection = () => {
                 <link.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
             ))}
-            <Button variant="default" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-              <Download className="w-4 h-4" />
-              Download CV
-            </Button>
+            <a href="/Sateesh_Singh.pdf" download="Sateesh_Singh_Resume.pdf">
+              <Button variant="default" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                <Download className="w-4 h-4" />
+                Download CV
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
 
