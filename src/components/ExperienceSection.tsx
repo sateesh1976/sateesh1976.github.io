@@ -5,7 +5,7 @@ import { Building2, Calendar } from "lucide-react";
 const experiences = [
   {
     title: "Principal Consultant / Agentic AI Leader (Founder)",
-    company: "Tech Consulting",
+    company: "AgenticAI Lab",
     period: "Apr 2025 – Present",
     description: "Deep expertise in Agentic AI, GenAI, LLMs, RAG. Leading multi-agent architectures with n8n Agentic AI workflows.",
     highlights: ["Agentic AI", "Multi-Agent Systems", "LLMs", "RAG"],
