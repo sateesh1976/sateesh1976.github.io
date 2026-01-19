@@ -60,7 +60,7 @@ const FooterSection = () => {
               <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
             </a>
             <a
-              href="https://techconsultingmum.github.io/"
+              href="https://agenticailab.in/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 rounded-xl bg-card border border-border hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 group"
