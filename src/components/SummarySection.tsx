@@ -21,7 +21,7 @@ const SummarySection = () => {
           <div className="glass-card p-8 md:p-10 max-w-4xl mx-auto">
             <p className="text-lg md:text-xl text-foreground/90 leading-relaxed">
               Accomplished <span className="text-primary font-semibold">Senior Data Scientist & Technology Leader</span> with{" "}
-              <span className="text-primary font-semibold">19+ years</span> of experience across AI/ML, CP4D, Cloud Platforms, 
+              <span className="text-primary font-semibold">20+ years</span> of experience across AI/ML, CP4D, Cloud Platforms,
               Data Engineering, and Enterprise Architecture. Proven expertise in designing and deploying AI-driven solutions 
               in <span className="text-primary">Azure, AWS, and GCP</span> environments.
             </p>
@@ -35,7 +35,7 @@ const SummarySection = () => {
           {/* Key highlights */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-4xl mx-auto">
             {[
-              { value: "19+", label: "Years Experience" },
+              { value: "20+", label: "Years Experience" },
               { value: "50+", label: "Projects Delivered" },
               { value: "3", label: "Cloud Platforms" },
               { value: "10+", label: "Industries" },
