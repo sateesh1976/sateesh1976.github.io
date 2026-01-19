@@ -11,7 +11,7 @@ const HeroSection = () => {
 
   const socialLinks = [
     { icon: Linkedin, href: "https://www.linkedin.com/in/sateesh-singh-2224b666/", label: "LinkedIn" },
-    { icon: Github, href: "https://sateesh1976.github.io/", label: "GitHub" },
+    { icon: Github, href: "https://github.com/sateesh1976/", label: "GitHub" },
   ];
 
   return (
