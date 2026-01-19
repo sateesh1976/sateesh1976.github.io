@@ -58,7 +58,7 @@ const HeroSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glow-border bg-secondary/50 mb-10"
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm font-medium text-foreground">19+ Years of Experience</span>
+            <span className="text-sm font-medium text-foreground">20+ Years of Experience</span>
           </motion.div>
 
           {/* Contact info */}
