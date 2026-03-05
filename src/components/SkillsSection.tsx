@@ -1,13 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { 
-  Cloud, 
-  Brain, 
-  Database, 
-  Code, 
-  Settings, 
-  Layers 
-} from "lucide-react";
+import { Cloud, Brain, Database, Code, Settings, Layers } from "lucide-react";
 
 const skillCategories = [
   {
@@ -83,9 +76,8 @@ const SkillsSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 bg-secondary/20 relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5">
+    <div ref={ref} className="py-24 bg-secondary/20 relative overflow-hidden" aria-labelledby="skills-heading">
+      <div className="absolute inset-0 opacity-5" aria-hidden="true">
         <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
           backgroundSize: '40px 40px'
@@ -98,7 +90,7 @@ const SkillsSection = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+          <h2 id="skills-heading" className="text-3xl md:text-4xl font-bold mb-4 text-center">
             <span className="gradient-text">Technical Expertise</span>
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -108,22 +100,22 @@ const SkillsSection = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skillCategories.map((category, index) => (
               <motion.div
-                key={index}
+                key={category.title}
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="glass-card p-6 hover:border-primary/30 transition-all duration-300 group"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300" aria-hidden="true">
                     <category.icon className="w-5 h-5" />
                   </div>
                   <h3 className="font-semibold text-lg text-foreground">{category.title}</h3>
                 </div>
-                <ul className="space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <li key={skillIndex} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                <ul className="space-y-2" aria-label={`${category.title} skills`}>
+                  {category.skills.map((skill) => (
+                    <li key={skill} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" aria-hidden="true" />
                       {skill}
                     </li>
                   ))}
@@ -133,7 +125,7 @@ const SkillsSection = () => {
           </div>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 

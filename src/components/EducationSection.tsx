@@ -41,7 +41,7 @@ const EducationSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 relative">
+    <div ref={ref} className="py-24 relative" aria-labelledby="education-heading">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -49,16 +49,15 @@ const EducationSection = () => {
           transition={{ duration: 0.7 }}
         >
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Education */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
-                <GraduationCap className="w-8 h-8 text-primary" />
+              <h2 id="education-heading" className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
+                <GraduationCap className="w-8 h-8 text-primary" aria-hidden="true" />
                 <span className="gradient-text">Education</span>
               </h2>
               <div className="space-y-6">
                 {education.map((edu, index) => (
                   <motion.div
-                    key={index}
+                    key={edu.degree}
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -68,28 +67,26 @@ const EducationSection = () => {
                     <p className="text-muted-foreground text-sm">{edu.institution}</p>
                     <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
+                        <MapPin className="w-3 h-3" aria-hidden="true" />
                         {edu.location}
                       </span>
-                      <span className="font-mono text-primary">{edu.period}</span>
+                      <time className="font-mono text-primary">{edu.period}</time>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* Certifications & Awards */}
             <div className="space-y-12">
-              {/* Certifications */}
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
-                  <Award className="w-8 h-8 text-primary" />
+                  <Award className="w-8 h-8 text-primary" aria-hidden="true" />
                   <span className="gradient-text">Certifications</span>
                 </h2>
                 <div className="grid gap-3">
                   {certifications.map((cert, index) => (
                     <motion.div
-                      key={index}
+                      key={cert.name}
                       initial={{ opacity: 0, x: 20 }}
                       animate={isInView ? { opacity: 1, x: 0 } : {}}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -99,19 +96,18 @@ const EducationSection = () => {
                         <p className="font-medium text-foreground">{cert.name}</p>
                         <p className="text-sm text-muted-foreground">{cert.issuer}</p>
                       </div>
-                      <span className="text-sm font-mono text-primary">{cert.year}</span>
+                      <time className="text-sm font-mono text-primary">{cert.year}</time>
                     </motion.div>
                   ))}
                 </div>
               </div>
 
-              {/* Awards */}
               <div>
                 <h3 className="text-xl font-bold mb-4 text-foreground">Awards & Recognition</h3>
                 <div className="space-y-3">
                   {awards.map((award, index) => (
                     <motion.div
-                      key={index}
+                      key={award.title}
                       initial={{ opacity: 0, x: 20 }}
                       animate={isInView ? { opacity: 1, x: 0 } : {}}
                       transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
@@ -129,7 +125,7 @@ const EducationSection = () => {
           </div>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 
