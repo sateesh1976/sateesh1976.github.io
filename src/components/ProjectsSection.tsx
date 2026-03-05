@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
 
 const projects = [
@@ -56,14 +56,14 @@ const ProjectsSection = () => {
   const displayedProjects = showAll ? projects : projects.slice(0, 4);
 
   return (
-    <section ref={ref} className="py-24 bg-secondary/20 relative">
+    <div ref={ref} className="py-24 bg-secondary/20 relative" aria-labelledby="projects-heading">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+          <h2 id="projects-heading" className="text-3xl md:text-4xl font-bold mb-4 text-center">
             <span className="gradient-text">Featured Projects</span>
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -72,31 +72,31 @@ const ProjectsSection = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             {displayedProjects.map((project, index) => (
-              <motion.div
-                key={index}
+              <motion.article
+                key={project.title}
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="glass-card p-6 hover:border-primary/30 transition-all duration-300 group"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
+                <div className="flex justify-between items-start mb-3 gap-2">
+                  <div className="min-w-0">
                     <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                       {project.title}
                     </h3>
                     <p className="text-primary text-sm">{project.client}</p>
                   </div>
-                  <span className="text-xs font-mono text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
+                  <time className="text-xs font-mono text-muted-foreground bg-secondary/50 px-2 py-1 rounded shrink-0">
                     {project.period}
-                  </span>
+                  </time>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.technologies.slice(0, 5).map((tech, techIndex) => (
+                  {project.technologies.slice(0, 5).map((tech) => (
                     <span
-                      key={techIndex}
+                      key={tech}
                       className="px-2 py-0.5 text-xs rounded bg-muted text-muted-foreground"
                     >
                       {tech}
@@ -108,7 +108,7 @@ const ProjectsSection = () => {
                     </span>
                   )}
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
 
@@ -138,7 +138,7 @@ const ProjectsSection = () => {
           )}
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 

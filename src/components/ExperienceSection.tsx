@@ -52,14 +52,14 @@ const ExperienceSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 relative">
+    <div ref={ref} className="py-24 relative" aria-labelledby="experience-heading">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+          <h2 id="experience-heading" className="text-3xl md:text-4xl font-bold mb-4 text-center">
             <span className="gradient-text">Professional Journey</span>
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -67,13 +67,12 @@ const ExperienceSection = () => {
           </p>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary/50 to-transparent md:-translate-x-1/2" />
+            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary/50 to-transparent md:-translate-x-1/2" aria-hidden="true" />
 
             <div className="space-y-8">
               {experiences.map((exp, index) => (
-                <motion.div
-                  key={index}
+                <motion.article
+                  key={exp.company + exp.period}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -81,26 +80,24 @@ const ExperienceSection = () => {
                     index % 2 === 0 ? "" : "md:direction-rtl"
                   }`}
                 >
-                  {/* Timeline dot */}
-                  <div className="absolute left-0 md:left-1/2 top-6 w-3 h-3 rounded-full bg-primary border-4 border-background md:-translate-x-1/2 z-10" />
+                  <div className="absolute left-0 md:left-1/2 top-6 w-3 h-3 rounded-full bg-primary border-4 border-background md:-translate-x-1/2 z-10" aria-hidden="true" />
 
-                  {/* Content */}
                   <div className={`pl-8 md:pl-0 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}`}>
                     <div className="glass-card p-6 hover:border-primary/30 transition-all duration-300">
                       <div className={`flex items-center gap-2 text-primary mb-2 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                        <Calendar className="w-4 h-4" />
-                        <span className="text-sm font-mono">{exp.period}</span>
+                        <Calendar className="w-4 h-4" aria-hidden="true" />
+                        <time className="text-sm font-mono">{exp.period}</time>
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-1">{exp.title}</h3>
                       <div className={`flex items-center gap-2 text-muted-foreground mb-3 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                        <Building2 className="w-4 h-4" />
+                        <Building2 className="w-4 h-4" aria-hidden="true" />
                         <span>{exp.company}</span>
                       </div>
                       <p className="text-muted-foreground text-sm mb-4">{exp.description}</p>
                       <div className={`flex flex-wrap gap-2 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                        {exp.highlights.map((highlight, hIndex) => (
+                        {exp.highlights.map((highlight) => (
                           <span
-                            key={hIndex}
+                            key={highlight}
                             className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20"
                           >
                             {highlight}
@@ -109,13 +106,13 @@ const ExperienceSection = () => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </motion.article>
               ))}
             </div>
           </div>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 

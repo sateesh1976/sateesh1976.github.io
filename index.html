@@ -17,6 +17,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@sateesh_singh" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="theme-color" content="#0e7490" />
+    <link rel="canonical" href="https://agenticailab.in/" />
+    <script>
+      // Prevent flash of wrong theme
+      (function() {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
 
   <body>

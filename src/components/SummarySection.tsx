@@ -1,20 +1,26 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+
+const stats = [
+  { value: "20+", label: "Years Experience" },
+  { value: "50+", label: "Projects Delivered" },
+  { value: "3", label: "Cloud Platforms" },
+  { value: "10+", label: "Industries" },
+];
 
 const SummarySection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 relative">
+    <div ref={ref} className="py-24 relative" aria-labelledby="summary-heading">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+          <h2 id="summary-heading" className="text-3xl md:text-4xl font-bold mb-8 text-center">
             <span className="gradient-text">Professional Summary</span>
           </h2>
 
@@ -32,29 +38,24 @@ const SummarySection = () => {
             </p>
           </div>
 
-          {/* Key highlights */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-4xl mx-auto">
-            {[
-              { value: "20+", label: "Years Experience" },
-              { value: "50+", label: "Projects Delivered" },
-              { value: "3", label: "Cloud Platforms" },
-              { value: "10+", label: "Industries" },
-            ].map((stat, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-4xl mx-auto" role="list" aria-label="Key statistics">
+            {stats.map((stat, index) => (
               <motion.div
-                key={index}
+                key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 className="text-center p-4 rounded-xl bg-secondary/30 border border-border/50"
+                role="listitem"
               >
-                <div className="text-3xl md:text-4xl font-bold gradient-text">{stat.value}</div>
+                <div className="text-3xl md:text-4xl font-bold gradient-text" aria-hidden="true">{stat.value}</div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 
