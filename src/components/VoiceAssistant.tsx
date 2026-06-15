@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { Mic, MicOff, Settings, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "elevenlabs_agent_id";
 
-const VoiceAssistant = () => {
+const VoiceAssistantInner = () => {
   const [open, setOpen] = useState(false);
   const [agentId, setAgentId] = useState("");
   const [showSettings, setShowSettings] = useState(false);
@@ -178,5 +178,11 @@ const VoiceAssistant = () => {
     </>
   );
 };
+
+const VoiceAssistant = () => (
+  <ConversationProvider>
+    <VoiceAssistantInner />
+  </ConversationProvider>
+);
 
 export default VoiceAssistant;
