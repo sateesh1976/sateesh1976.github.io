@@ -7,6 +7,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import EducationSection from "@/components/EducationSection";
 import FooterSection from "@/components/FooterSection";
 import BackToTop from "@/components/BackToTop";
+import VoiceAssistant from "@/components/VoiceAssistant";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -77,6 +78,7 @@ const Index = () => {
       </main>
 
       <BackToTop />
+      <VoiceAssistant />
 
       {/* JSON-LD structured data */}
       <script
