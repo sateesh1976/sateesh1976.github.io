@@ -5,17 +5,10 @@ Deno.serve(async (req) => {
 
   try {
     const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "ElevenLabs not configured" }), {
+    const agentId = Deno.env.get("ELEVENLABS_AGENT_ID");
+    if (!apiKey || !agentId) {
+      return new Response(JSON.stringify({ error: "Voice assistant not configured" }), {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const { agentId } = await req.json().catch(() => ({ agentId: null }));
-    if (!agentId || typeof agentId !== "string" || agentId.length > 200) {
-      return new Response(JSON.stringify({ error: "Valid agentId required" }), {
-        status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -27,8 +20,9 @@ Deno.serve(async (req) => {
 
     if (!res.ok) {
       const err = await res.text();
-      return new Response(JSON.stringify({ error: err || "Token request failed" }), {
-        status: res.status,
+      console.error("ElevenLabs token error:", res.status, err);
+      return new Response(JSON.stringify({ error: "Token request failed" }), {
+        status: 502,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -38,7 +32,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    console.error("elevenlabs-token error:", e);
+    return new Response(JSON.stringify({ error: "Internal error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
