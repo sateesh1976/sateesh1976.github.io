@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "elevenlabs_agent_id";
 
-const VoiceAssistant = () => {
+const VoiceAssistantInner = () => {
   const [open, setOpen] = useState(false);
   const [agentId, setAgentId] = useState("");
   const [showSettings, setShowSettings] = useState(false);
@@ -178,5 +178,11 @@ const VoiceAssistant = () => {
     </>
   );
 };
+
+const VoiceAssistant = () => (
+  <ConversationProvider>
+    <VoiceAssistantInner />
+  </ConversationProvider>
+);
 
 export default VoiceAssistant;
