@@ -7,19 +7,19 @@ const education = [
     degree: "Master of Computer Applications (MCA)",
     institution: "Galgotias Institute of Management & Technology (GMIT)",
     location: "Noida",
-    period: "2000 – 2003",
+    period: "1999 – 2002",
   },
   {
     degree: "Master of Science (M.Sc.) – Mathematics",
     institution: "Deen Dayal Upadhyay University",
     location: "Gorakhpur",
-    period: "1998 – 2000",
+    period: "1997 – 1999",
   },
   {
     degree: "Bachelor of Science (B.Sc.) – Mathematics, Chemistry",
     institution: "Deen Dayal Upadhyay University",
     location: "Gorakhpur",
-    period: "1995 – 1998",
+    period: "1994 – 1997",
   },
 ];
 
