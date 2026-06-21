@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Linkedin, Github, Globe } from "lucide-react";
+import ContactForm from "./ContactForm";
 
 const FooterSection = () => {
   return (
@@ -40,6 +41,14 @@ const FooterSection = () => {
               <MapPin className="w-5 h-5" aria-hidden="true" />
               <span>Mumbai, Maharashtra, India</span>
             </div>
+          </div>
+
+          <div className="max-w-xl mx-auto mb-12 rounded-2xl border border-border/60 bg-card/60 p-6 sm:p-8 backdrop-blur-sm">
+            <h3 className="text-xl font-semibold mb-1">Send a message</h3>
+            <p className="text-sm text-muted-foreground mb-5">
+              Fill out the form and I'll get back to you within a couple of business days.
+            </p>
+            <ContactForm />
           </div>
 
           <nav className="flex justify-center gap-4 mb-10" aria-label="Social links">

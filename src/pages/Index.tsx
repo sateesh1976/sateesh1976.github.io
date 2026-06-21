@@ -5,6 +5,7 @@ import SkillsSection from "@/components/SkillsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import EducationSection from "@/components/EducationSection";
+import ArticlesSection from "@/components/ArticlesSection";
 import FooterSection from "@/components/FooterSection";
 import BackToTop from "@/components/BackToTop";
 import VoiceAssistant from "@/components/VoiceAssistant";
@@ -71,6 +72,8 @@ const Index = () => {
         <section id="education" aria-label="Education">
           <EducationSection />
         </section>
+
+        <ArticlesSection />
 
         <section id="contact" aria-label="Contact">
           <FooterSection />
