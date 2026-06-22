@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>Sateesh Kumar Singh</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      // GitHub Pages SPA redirect — preserves the requested path & query
+      // by encoding them into the query string of /, then index.html restores it.
+      // See: https://github.com/rafgraph/spa-github-pages
+      (function () {
+        var segmentCount = 0; // adjust if hosted at a sub-path
+        var l = window.location;
+        var pathname = l.pathname.split("/").slice(0, 1 + segmentCount).join("/") + "/";
+        var rest =
+          "/?p=/" +
+          l.pathname.slice(1).split("/").slice(segmentCount).join("/").replace(/&/g, "~and~") +
+          (l.search ? "&q=" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash;
+        l.replace(l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "") + pathname + rest);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

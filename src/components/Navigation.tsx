@@ -1,50 +1,62 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Education", href: "#education" },
-  { label: "Articles", href: "#articles" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", to: "/" },
+  { label: "About", to: "/about" },
+  { label: "Experience", to: "/experience" },
+  { label: "Projects", to: "/projects" },
+  { label: "Skills", to: "/skills" },
+  { label: "Articles", to: "/articles" },
+  { label: "Resume", to: "/resume" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on escape
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsMobileMenuOpen(false);
-    };
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setIsMobileMenuOpen(false); };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setIsMobileMenuOpen(false);
-  };
+  // Close on route change
+  useEffect(() => { setIsMobileMenuOpen(false); }, [location.pathname]);
+
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    cn(
+      "px-3 lg:px-4 py-2 text-sm rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      isActive
+        ? "text-foreground bg-secondary/70 font-medium"
+        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+    );
+
+  const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+    cn(
+      "block px-4 py-3 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      isActive
+        ? "text-foreground bg-secondary/70 font-medium"
+        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+    );
 
   return (
     <>
@@ -52,46 +64,34 @@ const Navigation = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-background/80 backdrop-blur-lg border-b border-border/50 shadow-sm" : ""
-        }`}
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          isScrolled || location.pathname !== "/"
+            ? "bg-background/80 backdrop-blur-lg border-b border-border/50 shadow-sm"
+            : "",
+        )}
         role="navigation"
         aria-label="Main navigation"
       >
         <div className="section-container">
           <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="font-bold text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1"
-              aria-label="Scroll to top"
-              type="button"
-            >
+            <Link to="/" className="font-bold text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1" aria-label="Home">
               <span className="gradient-text">SKS</span>
-            </button>
+            </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
-                  className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
+                <NavLink key={item.to} to={item.to} end={item.to === "/"} className={linkClass}>
                   {item.label}
-                </a>
+                </NavLink>
               ))}
               <ThemeToggle />
             </div>
 
-            {/* Mobile controls */}
             <div className="flex items-center gap-1 md:hidden">
               <ThemeToggle />
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={() => setIsMobileMenuOpen((v) => !v)}
                 className="p-2 rounded-lg hover:bg-secondary/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMobileMenuOpen}
@@ -104,23 +104,17 @@ const Navigation = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm md:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
               aria-hidden="true"
             />
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-x-0 top-16 z-50 bg-background/95 backdrop-blur-lg border-b border-border/50 md:hidden"
               role="menu"
@@ -128,18 +122,9 @@ const Navigation = () => {
               <div className="section-container py-4">
                 <div className="flex flex-col gap-1">
                   {navItems.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollToSection(item.href);
-                      }}
-                      className="px-4 py-3 text-left text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      role="menuitem"
-                    >
+                    <NavLink key={item.to} to={item.to} end={item.to === "/"} className={mobileLinkClass} role="menuitem">
                       {item.label}
-                    </a>
+                    </NavLink>
                   ))}
                 </div>
               </div>
