@@ -1,7 +1,36 @@
-import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+const ALLOWED_ORIGINS = [
+  "https://sateeshsingh.lovable.app",
+  "https://id-preview--2b82243b-b748-4001-a7ea-55cc3ab7bd6b.lovable.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+];
+
+function buildCorsHeaders(origin: string | null): Record<string, string> {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Vary": "Origin",
+  };
+}
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const origin = req.headers.get("origin");
+  const corsHeaders = buildCorsHeaders(origin);
+
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
+  // Restrict to known origins to prevent third-party abuse of the API key.
+  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
