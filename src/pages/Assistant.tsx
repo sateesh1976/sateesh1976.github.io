@@ -215,7 +215,7 @@ const AssistantPage = () => {
       <SEO
         title="AI Assistant | Sateesh Kumar Singh"
         description="Chat with Sateesh's AI assistant via text or voice. Ask about his experience, skills, projects, and how to get in touch."
-        canonical="https://sateeshsingh.lovable.app/assistant"
+        path="/assistant"
       />
 
       <section className="section-container py-10 md:py-16">
