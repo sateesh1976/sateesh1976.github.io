@@ -1,0 +1,133 @@
+// Streaming chat endpoint backed by Lovable AI Gateway.
+// Uses a fixed system prompt embedding the portfolio knowledge base.
+
+const ALLOWED_ORIGINS = [
+  "https://sateeshsingh.lovable.app",
+  "https://id-preview--2b82243b-b748-4001-a7ea-55cc3ab7bd6b.lovable.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+];
+
+function cors(origin: string | null): Record<string, string> {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    Vary: "Origin",
+  };
+}
+
+const SYSTEM_PROMPT = `You are SKS Assistant, a friendly and professional AI assistant for Sateesh Kumar Singh's portfolio website.
+
+Your job:
+- Answer questions about Sateesh's experience, skills, projects, and background using the knowledge below.
+- Help visitors navigate the website.
+- If asked something outside this knowledge, say so honestly and suggest the Contact page.
+- Keep replies concise, well-structured, and use markdown when helpful.
+- Never invent facts. Refer to Sateesh in third person ("Sateesh", "he").
+
+# Profile
+- Name: Sateesh Kumar Singh (brand "SKS")
+- Title: Senior Data Scientist & Technology Leader
+- Experience: 20+ years
+- Consulting: AgenticAI Lab (https://agenticailab.in)
+- LinkedIn: https://www.linkedin.com/in/sateeshsingh
+- GitHub: https://github.com/sateeshsingh
+
+# Summary
+20+ years across AI/ML, IBM Cloud Pak for Data (CP4D), Cloud (Azure/AWS/GCP), Data Engineering,
+and Enterprise Architecture. Designs and deploys AI-driven solutions, builds scalable
+architectures, leads cross-functional teams, and delivers high-impact solutions across banking,
+automotive, and healthcare. Skilled in CI/CD, MLOps, and cloud-native architectures.
+
+# Skills
+- Languages: Python, SQL, Java, R, Scala
+- ML/AI: TensorFlow, PyTorch, scikit-learn, LangChain, LLMs, RAG, Vector DBs, Agentic AI
+- Data: Spark, Hadoop, Kafka, Airflow, dbt
+- Cloud: Azure ML, AWS SageMaker, GCP Vertex AI, Databricks, Snowflake, Watsonx, CP4D
+- DevOps: Docker, Kubernetes, Terraform, GitHub Actions, MLOps
+
+# Industries
+Banking & Financial Services, Automotive, Healthcare, Telecom, Retail.
+
+# Highlights
+50+ projects, 3 major cloud platforms, 10+ industries.
+
+# Website pages
+/ Home · /about · /experience · /projects · /skills · /articles · /resume (PDF download) · /contact · /assistant (this page)
+`;
+
+Deno.serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const corsHeaders = cors(origin);
+
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: "AI not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { messages } = await req.json();
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "messages required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Trim history to last 20 messages to control tokens.
+    const trimmed = messages.slice(-20).map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: String(m.content ?? "").slice(0, 4000),
+    }));
+
+    const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Lovable-API-Key": apiKey,
+      },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        stream: true,
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
+      }),
+    });
+
+    if (!upstream.ok) {
+      const text = await upstream.text();
+      console.error("Gateway error", upstream.status, text);
+      const status = upstream.status === 402 || upstream.status === 429 ? upstream.status : 502;
+      return new Response(JSON.stringify({ error: "AI request failed", status, detail: text.slice(0, 500) }), {
+        status,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(upstream.body, {
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+      },
+    });
+  } catch (e) {
+    console.error("ai-chat error", e);
+    return new Response(JSON.stringify({ error: "Internal error" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
