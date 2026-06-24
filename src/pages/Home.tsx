@@ -34,13 +34,6 @@ const websiteJsonLd = {
   url: "https://sateeshsingh.lovable.app/",
 };
 
-const highlights = [
-  { value: "20+", label: "Years of Experience" },
-  { value: "50+", label: "Projects Delivered" },
-  { value: "3", label: "Cloud Platforms" },
-  { value: "10+", label: "Industries Served" },
-];
-
 const Home = () => (
   <>
     <SEO
@@ -53,18 +46,9 @@ const Home = () => (
     <HeroSection />
     <SummarySection />
 
-    <section className="py-20" aria-labelledby="home-highlights">
+    <section className="py-20" aria-labelledby="home-cta">
       <div className="section-container">
-        <h2 id="home-highlights" className="sr-only">Key achievements</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
-          {highlights.map((h) => (
-            <div key={h.label} className="text-center p-5 rounded-xl bg-secondary/30 border border-border/50">
-              <div className="text-3xl md:text-4xl font-bold gradient-text">{h.value}</div>
-              <div className="text-sm text-muted-foreground mt-1">{h.label}</div>
-            </div>
-          ))}
-        </div>
-
+        <h2 id="home-cta" className="sr-only">Next steps</h2>
         <div className="text-center max-w-2xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold mb-3">
             <span className="gradient-text">Let's build what's next.</span>
