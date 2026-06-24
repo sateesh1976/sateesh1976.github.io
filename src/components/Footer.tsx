@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Github, Globe, ArrowUpRight, Download } from "lucide-react";
-import NewsletterSubscribe from "./NewsletterSubscribe";
 
 const exploreLinks = [
   { to: "/about", label: "About" },
@@ -126,10 +125,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact + Newsletter */}
+          {/* Contact */}
           <div className="lg:col-span-4">
             <h3 className="font-semibold mb-4 text-xs uppercase tracking-wider text-foreground/80">Contact</h3>
-            <ul className="space-y-2.5 text-sm mb-6">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <a
                   href="mailto:sateesh.singh76@gmail.com"
@@ -151,8 +150,6 @@ const Footer = () => {
                 <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" /> Mumbai, Maharashtra, India
               </li>
             </ul>
-
-            <NewsletterSubscribe />
           </div>
         </div>
       </div>
