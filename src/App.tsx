@@ -17,6 +17,7 @@ const ArticlesPage = lazy(() => import("./pages/ArticlesPage"));
 const ResumePage = lazy(() => import("./pages/ResumePage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const Assistant = lazy(() => import("./pages/Assistant"));
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/resume" element={<ResumePage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/assistant" element={<Assistant />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Route>
