@@ -7,7 +7,7 @@ export const PROFILE_KNOWLEDGE = `
 ## Identity
 - Name: Sateesh Kumar Singh
 - Brand: SKS
-- Title: Senior Data Scientist & Technology Leader
+- Title: Gen AI Architect & Agentic AI Leader
 - Experience: 20+ years
 - Consulting Entity: AgenticAI Lab (https://agenticailab.in)
 - Website: https://sateeshsingh.lovable.app
@@ -15,12 +15,13 @@ export const PROFILE_KNOWLEDGE = `
 - GitHub: https://github.com/sateeshsingh
 
 ## Professional Summary
-Accomplished Senior Data Scientist and Technology Leader with 20+ years of experience across
-AI/ML, IBM Cloud Pak for Data (CP4D), Cloud Platforms, Data Engineering, and Enterprise
-Architecture. Proven expertise in designing and deploying AI-driven solutions on Azure, AWS,
-and GCP. Adept at building scalable architectures, leading cross-functional teams, and
-delivering high-impact solutions across banking, automotive, and healthcare. Skilled in
-CI/CD, MLOps, and cloud-native architectures to drive innovation and technical excellence.
+Accomplished Gen AI Architect & Agentic AI Leader with 20+ years of experience across
+AI/ML, Generative AI, Agentic AI, IBM Cloud Pak for Data (CP4D), Cloud Platforms, Data
+Engineering, and Enterprise Architecture. Proven expertise in designing and deploying
+GenAI and agentic AI platforms on Azure, AWS, and GCP. Adept at building scalable
+architectures, leading cross-functional teams, and delivering high-impact solutions across
+banking, automotive, and healthcare. Skilled in CI/CD, MLOps/LLMOps, RAG, vector databases,
+and cloud-native architectures to drive innovation and technical excellence.
 
 ## Core Competencies
 - AI / Machine Learning / Generative AI / Agentic AI

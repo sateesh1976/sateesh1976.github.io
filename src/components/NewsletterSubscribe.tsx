@@ -19,15 +19,31 @@ const NewsletterSubscribe = () => {
       return;
     }
     setStatus("loading");
+    const payload = {
+      action: "subscribe" as const,
+      email: parsed.data,
+      timestamp: new Date().toISOString(),
+    };
+    console.info("[newsletter] subscribe", payload);
     try {
-      const res = await fetch(`${NEWSLETTER_URL}?email=${encodeURIComponent(parsed.data)}`, {
-        method: "GET",
+      // Prefer POST + JSON for consistency with the unsubscribe action.
+      let res = await fetch(NEWSLETTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
       });
+      if (!res.ok) {
+        // Backward-compat GET fallback (existing webhook behaviour).
+        res = await fetch(`${NEWSLETTER_URL}?email=${encodeURIComponent(parsed.data)}&action=subscribe`, {
+          method: "GET",
+        });
+      }
       if (!res.ok) throw new Error(`Subscription failed (${res.status})`);
       setStatus("success");
       toast.success("Subscribed! Check your inbox for upcoming editions.");
       setEmail("");
     } catch (err) {
+      console.error("[newsletter] subscribe failed", err);
       setStatus("idle");
       toast.error(err instanceof Error ? err.message : "Subscription failed. Please try again.");
     }

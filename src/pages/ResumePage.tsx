@@ -8,7 +8,7 @@ const ResumePage = () => (
   <>
     <SEO
       title="Resume — Sateesh Kumar Singh"
-      description="Interactive resume and downloadable CV for Sateesh Kumar Singh — Senior Data Scientist & Technology Leader."
+      description="Interactive resume and downloadable CV for Sateesh Kumar Singh — Gen AI Architect & Agentic AI Leader."
       path="/resume"
     />
     <section className="py-12">

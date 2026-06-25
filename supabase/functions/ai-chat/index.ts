@@ -1,19 +1,28 @@
 // Streaming chat endpoint backed by Lovable AI Gateway.
 // Uses a fixed system prompt embedding the portfolio knowledge base.
 
-const ALLOWED_ORIGINS = [
-  "https://sateeshsingh.lovable.app",
-  "https://id-preview--2b82243b-b748-4001-a7ea-55cc3ab7bd6b.lovable.app",
-  "http://localhost:8080",
-  "http://localhost:5173",
+// Allow the production site, any Lovable preview/sandbox, and local dev.
+const ORIGIN_ALLOW_PATTERNS: RegExp[] = [
+  /^https:\/\/sateeshsingh\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/[a-z0-9-]+\.sandbox\.lovable\.dev$/,
+  /^http:\/\/localhost(?::\d+)?$/,
+  /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
 ];
 
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  return ORIGIN_ALLOW_PATTERNS.some((re) => re.test(origin));
+}
+
 function cors(origin: string | null): Record<string, string> {
-  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowed = isAllowedOrigin(origin) ? (origin as string) : "https://sateeshsingh.lovable.app";
   return {
     "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
 }
@@ -29,30 +38,39 @@ Your job:
 
 # Profile
 - Name: Sateesh Kumar Singh (brand "SKS")
-- Title: Senior Data Scientist & Technology Leader
+- Title: Gen AI Architect & Agentic AI Leader
 - Experience: 20+ years
 - Consulting: AgenticAI Lab (https://agenticailab.in)
 - LinkedIn: https://www.linkedin.com/in/sateeshsingh
 - GitHub: https://github.com/sateeshsingh
 
 # Summary
-20+ years across AI/ML, IBM Cloud Pak for Data (CP4D), Cloud (Azure/AWS/GCP), Data Engineering,
-and Enterprise Architecture. Designs and deploys AI-driven solutions, builds scalable
-architectures, leads cross-functional teams, and delivers high-impact solutions across banking,
-automotive, and healthcare. Skilled in CI/CD, MLOps, and cloud-native architectures.
+Gen AI Architect & Agentic AI Leader with 20+ years across AI/ML, Generative AI, Agentic AI,
+IBM Cloud Pak for Data (CP4D), Cloud (Azure/AWS/GCP), Data Engineering, and Enterprise
+Architecture. Designs and deploys GenAI and agentic AI platforms, builds scalable architectures,
+leads cross-functional teams, and delivers high-impact solutions across banking, automotive,
+and healthcare. Skilled in CI/CD, MLOps/LLMOps, RAG, vector databases, and cloud-native architectures.
+
+# Gen AI & Agentic AI Highlights
+- Architects multi-agent systems using LangChain, LangGraph, and orchestration frameworks.
+- Designs production RAG pipelines with vector databases (pgvector, Pinecone, Weaviate).
+- Leads enterprise GenAI platform builds on Azure OpenAI, AWS Bedrock, GCP Vertex AI, and Watsonx.
+- Implements LLMOps practices: evaluation, guardrails, observability, and cost optimization.
 
 # Skills
 - Languages: Python, SQL, Java, R, Scala
-- ML/AI: TensorFlow, PyTorch, scikit-learn, LangChain, LLMs, RAG, Vector DBs, Agentic AI
+- ML/AI: TensorFlow, PyTorch, scikit-learn, LangChain, LangGraph, LLMs, RAG, Vector DBs, Agentic AI
 - Data: Spark, Hadoop, Kafka, Airflow, dbt
-- Cloud: Azure ML, AWS SageMaker, GCP Vertex AI, Databricks, Snowflake, Watsonx, CP4D
-- DevOps: Docker, Kubernetes, Terraform, GitHub Actions, MLOps
+- Cloud: Azure OpenAI/ML, AWS Bedrock/SageMaker, GCP Vertex AI, Databricks, Snowflake, Watsonx, CP4D
+- DevOps: Docker, Kubernetes, Terraform, GitHub Actions, MLOps, LLMOps
 
 # Industries
 Banking & Financial Services, Automotive, Healthcare, Telecom, Retail.
 
-# Highlights
-50+ projects, 3 major cloud platforms, 10+ industries.
+# Leadership
+Has led cross-functional engineering, data science, and architecture teams across India, France,
+and the Netherlands. Runs AgenticAI Lab — a boutique consulting practice focused on agentic AI,
+GenAI platform architecture, and CP4D / multi-cloud delivery for regulated industries.
 
 # Website pages
 / Home · /about · /experience · /projects · /skills · /articles · /resume (PDF download) · /contact · /assistant (this page)
@@ -63,7 +81,8 @@ Deno.serve(async (req) => {
   const corsHeaders = cors(origin);
 
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+  if (!isAllowedOrigin(origin)) {
+    console.warn("ai-chat blocked origin", origin);
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -100,7 +119,7 @@ Deno.serve(async (req) => {
         "Lovable-API-Key": apiKey,
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         stream: true,
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
       }),
