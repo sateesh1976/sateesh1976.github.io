@@ -37,8 +37,8 @@ const websiteJsonLd = {
 const Home = () => (
   <>
     <SEO
-      title="Sateesh Kumar Singh — Senior Data Scientist & AI Leader"
-      description="Portfolio of Sateesh Kumar Singh: Senior Data Scientist & Technology Leader with 20+ years in AI/ML, Cloud (Azure, AWS, GCP), and Enterprise Architecture."
+      title="Sateesh Kumar Singh — Gen AI Architect & Agentic AI Leader"
+      description="Portfolio of Sateesh Kumar Singh: Gen AI Architect & Agentic AI Leader with 20+ years in AI/ML, Generative AI, Cloud (Azure, AWS, GCP), and Enterprise Architecture."
       path="/"
       jsonLd={[personJsonLd, websiteJsonLd]}
     />
