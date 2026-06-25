@@ -20,7 +20,7 @@ const About = () => (
   <>
     <SEO
       title="About — Sateesh Kumar Singh"
-      description="Professional background, career journey, and values of Sateesh Kumar Singh — Senior Data Scientist & Technology Leader."
+      description="Professional background, career journey, and values of Sateesh Kumar Singh — Gen AI Architect & Agentic AI Leader."
       path="/about"
       type="profile"
     />
