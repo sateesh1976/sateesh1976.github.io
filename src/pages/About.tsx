@@ -32,7 +32,7 @@ const About = () => (
             <span className="gradient-text">About me</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-            I'm Sateesh — a Senior Data Scientist and Technology Leader based in Mumbai with 20+ years
+            I'm Sateesh — a Gen AI Architect and Agentic AI Leader based in Mumbai with 20+ years
             of experience designing and shipping data, AI, and cloud platforms for global enterprises.
           </p>
           <p className="text-base text-foreground/90 leading-relaxed mb-4">
