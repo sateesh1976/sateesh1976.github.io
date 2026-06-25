@@ -9,7 +9,7 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Sateesh Kumar Singh",
-  jobTitle: "Senior Data Scientist & Technology Leader",
+  jobTitle: "Gen AI Architect & Agentic AI Leader",
   url: "https://sateeshsingh.lovable.app/",
   email: "sateesh.singh76@gmail.com",
   telephone: "+91-9920074439",
