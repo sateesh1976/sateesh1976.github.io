@@ -45,7 +45,7 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground font-light mb-8"
           >
-            Senior Data Scientist & Technology Leader
+            Gen AI Architect & Agentic AI Leader
           </motion.p>
 
           <motion.div
