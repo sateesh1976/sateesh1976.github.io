@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Linkedin, Github, Download } from "lucide-react";
 import { Button } from "./ui/button";
+import profileAsset from "@/assets/sateesh-profile.jpg.asset.json";
 
 const HeroSection = () => {
   const contactItems = [
