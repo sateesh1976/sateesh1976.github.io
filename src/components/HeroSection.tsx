@@ -30,6 +30,23 @@ const HeroSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center"
         >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mx-auto mb-6 w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
+          >
+            <img
+              src={profileAsset.url}
+              alt="Portrait of Sateesh Kumar Singh"
+              width={320}
+              height={320}
+              loading="eager"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -44,10 +61,19 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-muted-foreground font-light mb-8"
+            className="text-xl md:text-2xl text-foreground font-medium mb-2"
           >
-            Gen AI Architect & Agentic AI Leader
+            Principal Consultant | Agentic AI Leader
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="text-base md:text-lg text-muted-foreground font-light mb-8"
+          >
+            AI, GenAI, Data Science &amp; Enterprise Architecture
+          </motion.p>
+
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
