@@ -457,7 +457,7 @@ const VoicePanelInner = () => {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       const { data, error } = await supabase.functions.invoke("elevenlabs-token", {
-        headers: { "x-edge-secret": import.meta.env.VITE_EDGE_SHARED_SECRET ?? "" },
+        body: { secret: import.meta.env.VITE_EDGE_SHARED_SECRET ?? "" },
       });
 
       if (error || !data?.token) throw new Error("Unable to start voice chat right now.");
