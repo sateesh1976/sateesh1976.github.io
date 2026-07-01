@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Linkedin, Github, Globe, ArrowUpRight, Download } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Globe, ArrowUpRight, Download, MessageCircle } from "lucide-react";
+import NewsletterSubscribe from "./NewsletterSubscribe";
+
 
 const exploreLinks = [
   { to: "/about", label: "About" },
@@ -33,7 +35,12 @@ const Footer = () => {
       <h2 id="footer-heading" className="sr-only">Site footer</h2>
 
       <div className="section-container py-14 lg:py-16">
+        <div className="mb-10 lg:mb-12">
+          <NewsletterSubscribe />
+        </div>
+
         <div className="grid gap-10 lg:gap-12 lg:grid-cols-12">
+
           {/* Brand + identity */}
           <div className="lg:col-span-4">
             <Link
@@ -146,6 +153,18 @@ const Footer = () => {
                   <Phone className="w-4 h-4 shrink-0" aria-hidden="true" /> +91 99200 74439
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://wa.me/919920074439"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Chat on WhatsApp"
+                >
+                  <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> WhatsApp: +91 99200 74439
+                </a>
+              </li>
+
               <li className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" /> Mumbai, Maharashtra, India
               </li>

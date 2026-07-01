@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Calendar, AlertCircle, Loader2 } from "lucide-react";
 import { fetchLinkedInArticles, type LinkedInArticle } from "@/lib/linkedinArticles";
-import NewsletterSubscribe from "./NewsletterSubscribe";
+
 
 const formatDate = (d: Date | null, fallback: string) => {
   if (!d) return fallback;
@@ -140,9 +140,8 @@ const ArticlesSection = () => {
             </>
           )}
 
-          <div className="mt-10">
-            <NewsletterSubscribe />
-          </div>
+
+
         </div>
       </div>
     </section>

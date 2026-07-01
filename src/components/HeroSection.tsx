@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Linkedin, Github, Download } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Download, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import profileAsset from "@/assets/sateesh-profile.jpg.asset.json";
 
 const HeroSection = () => {
   const contactItems = [
     { icon: Phone, text: "+91-9920074439", href: "tel:+919920074439", label: "Call phone" },
+    { icon: MessageCircle, text: "WhatsApp", href: "https://wa.me/919920074439", label: "Chat on WhatsApp", external: true },
     { icon: Mail, text: "sateesh.singh76@gmail.com", href: "mailto:sateesh.singh76@gmail.com", label: "Send email" },
     { icon: MapPin, text: "Mumbai, Maharashtra, India", href: null, label: "Location" },
   ];
+
 
   const socialLinks = [
     { icon: Linkedin, href: "https://www.linkedin.com/in/sateesh-singh-2224b666/", label: "LinkedIn profile" },
@@ -34,18 +36,19 @@ const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mb-6 w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
+            className="mx-auto mb-6 w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
           >
             <img
               src={profileAsset.url}
               alt="Portrait of Sateesh Kumar Singh"
-              width={320}
-              height={320}
+              width={352}
+              height={352}
               loading="eager"
               decoding="async"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
             />
           </motion.div>
+
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -95,9 +98,15 @@ const HeroSection = () => {
               <div key={index} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <item.icon className="w-4 h-4 text-primary" aria-hidden="true" />
                 {item.href ? (
-                  <a href={item.href} className="text-sm md:text-base hover:underline underline-offset-4" aria-label={item.label}>
+                  <a
+                    href={item.href}
+                    className="text-sm md:text-base hover:underline underline-offset-4"
+                    aria-label={item.label}
+                    {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
                     {item.text}
                   </a>
+
                 ) : (
                   <span className="text-sm md:text-base">{item.text}</span>
                 )}
