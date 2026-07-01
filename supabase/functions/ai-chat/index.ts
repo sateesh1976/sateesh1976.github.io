@@ -90,15 +90,6 @@ Deno.serve(async (req) => {
 
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
-  const providedSecret = req.headers.get("x-edge-secret") ?? "";
-  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-
   if (!isAllowedOrigin(origin)) {
     console.warn("ai-chat blocked origin", origin);
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -106,7 +97,6 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-
 
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -117,13 +107,24 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { messages, secret } = body ?? {};
+
+    const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
+    if (!sharedSecret || typeof secret !== "string" || !safeEqual(secret, sharedSecret)) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
 
     // Trim history to last 20 messages to control tokens.
     const trimmed = messages.slice(-20).map((m: { role: string; content: string }) => ({
