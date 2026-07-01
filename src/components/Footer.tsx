@@ -153,6 +153,18 @@ const Footer = () => {
                   <Phone className="w-4 h-4 shrink-0" aria-hidden="true" /> +91 99200 74439
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://wa.me/919920074439"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Chat on WhatsApp"
+                >
+                  <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> WhatsApp: +91 99200 74439
+                </a>
+              </li>
+
               <li className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" /> Mumbai, Maharashtra, India
               </li>
