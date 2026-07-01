@@ -34,18 +34,19 @@ const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mb-6 w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
+            className="mx-auto mb-6 w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
           >
             <img
               src={profileAsset.url}
               alt="Portrait of Sateesh Kumar Singh"
-              width={320}
-              height={320}
+              width={352}
+              height={352}
               loading="eager"
               decoding="async"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
             />
           </motion.div>
+
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
