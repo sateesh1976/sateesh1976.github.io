@@ -26,7 +26,7 @@ const SummarySection = () => {
 
           <div className="glass-card p-8 md:p-10 max-w-4xl mx-auto">
             <p className="text-lg md:text-xl text-foreground/90 leading-relaxed">
-              Accomplished <span className="text-primary font-semibold">Gen AI Architect & Agentic AI Leader</span> with{" "}
+              Accomplished <span className="text-primary font-semibold">Principal Consultant | Agentic AI Leader</span> with{" "}
               <span className="text-primary font-semibold">20+ years</span> of experience across AI/ML, Generative AI, CP4D, Cloud Platforms,
               Data Engineering, and Enterprise Architecture. Proven expertise in designing and deploying GenAI and agentic AI
               solutions in <span className="text-primary">Azure, AWS, and GCP</span> environments.

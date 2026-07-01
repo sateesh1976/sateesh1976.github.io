@@ -44,7 +44,7 @@ const Footer = () => {
               <span className="gradient-text">Sateesh Kumar Singh</span>
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground max-w-sm">
-              Gen AI Architect &amp; Agentic AI Leader with 20+ years across
+              Principal Consultant | Agentic AI Leader with 20+ years across
               AI/ML, Generative AI, Cloud, and Enterprise Architecture. Helping teams
               ship meaningful, production-grade intelligent systems.
             </p>

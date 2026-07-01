@@ -20,7 +20,7 @@ function cors(origin: string | null): Record<string, string> {
   const allowed = isAllowedOrigin(origin) ? (origin as string) : "https://sateeshsingh.lovable.app";
   return {
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-edge-secret",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -46,14 +46,14 @@ Your job:
 
 # Profile
 - Name: Sateesh Kumar Singh (brand "SKS")
-- Title: Gen AI Architect & Agentic AI Leader
+- Title: Principal Consultant | Agentic AI Leader
 - Experience: 20+ years
 - Consulting: AgenticAI Lab (https://agenticailab.in)
 - LinkedIn: https://www.linkedin.com/in/sateeshsingh
 - GitHub: https://github.com/sateeshsingh
 
 # Summary
-Gen AI Architect & Agentic AI Leader with 20+ years across AI/ML, Generative AI, Agentic AI,
+Principal Consultant | Agentic AI Leader with 20+ years across AI/ML, Generative AI, Agentic AI,
 IBM Cloud Pak for Data (CP4D), Cloud (Azure/AWS/GCP), Data Engineering, and Enterprise
 Architecture. Designs and deploys GenAI and agentic AI platforms, builds scalable architectures,
 leads cross-functional teams, and delivers high-impact solutions across banking, automotive,
@@ -90,15 +90,6 @@ Deno.serve(async (req) => {
 
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
-  const providedSecret = req.headers.get("x-edge-secret") ?? "";
-  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-
   if (!isAllowedOrigin(origin)) {
     console.warn("ai-chat blocked origin", origin);
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -106,7 +97,6 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-
 
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -117,13 +107,24 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { messages, secret } = body ?? {};
+
+    const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
+    if (!sharedSecret || typeof secret !== "string" || !safeEqual(secret, sharedSecret)) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
 
     // Trim history to last 20 messages to control tokens.
     const trimmed = messages.slice(-20).map((m: { role: string; content: string }) => ({

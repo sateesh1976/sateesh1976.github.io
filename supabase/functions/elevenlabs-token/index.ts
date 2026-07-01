@@ -9,8 +9,7 @@ function buildCorsHeaders(origin: string | null): Record<string, string> {
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type, x-edge-secret",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
     "Vary": "Origin",
   };
@@ -32,10 +31,18 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  // Require shared secret header (in addition to origin check) to block
-  // origin-spoofed non-browser clients from draining ElevenLabs credits.
+  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Shared-secret verification via request body (avoids CORS preflight
+  // issues with custom headers behind the Supabase edge gateway).
+  const body = await req.json().catch(() => ({}));
   const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
-  const providedSecret = req.headers.get("x-edge-secret") ?? "";
+  const providedSecret = typeof body?.secret === "string" ? body.secret : "";
   if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
@@ -43,12 +50,6 @@ Deno.serve(async (req) => {
     });
   }
 
-  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
 
   try {
     const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
