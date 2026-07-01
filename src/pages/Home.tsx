@@ -9,7 +9,7 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Sateesh Kumar Singh",
-  jobTitle: "Gen AI Architect & Agentic AI Leader",
+  jobTitle: "Principal Consultant | Agentic AI Leader",
   url: "https://sateeshsingh.lovable.app/",
   email: "sateesh.singh76@gmail.com",
   telephone: "+91-9920074439",
@@ -37,8 +37,8 @@ const websiteJsonLd = {
 const Home = () => (
   <>
     <SEO
-      title="Sateesh Kumar Singh — Gen AI Architect & Agentic AI Leader"
-      description="Portfolio of Sateesh Kumar Singh: Gen AI Architect & Agentic AI Leader with 20+ years in AI/ML, Generative AI, Cloud (Azure, AWS, GCP), and Enterprise Architecture."
+      title="Sateesh Kumar Singh — Principal Consultant | Agentic AI Leader"
+      description="Portfolio of Sateesh Kumar Singh: Principal Consultant | Agentic AI Leader with 20+ years in AI/ML, Generative AI, Cloud (Azure, AWS, GCP), and Enterprise Architecture."
       path="/"
       jsonLd={[personJsonLd, websiteJsonLd]}
     />
