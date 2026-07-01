@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Linkedin, Github, Globe, ArrowUpRight, Download } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Globe, ArrowUpRight, Download, MessageCircle } from "lucide-react";
+import NewsletterSubscribe from "./NewsletterSubscribe";
+
 
 const exploreLinks = [
   { to: "/about", label: "About" },
