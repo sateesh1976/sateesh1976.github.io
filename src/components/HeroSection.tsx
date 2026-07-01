@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Linkedin, Github, Download } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Download, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import profileAsset from "@/assets/sateesh-profile.jpg.asset.json";
 
 const HeroSection = () => {
   const contactItems = [
     { icon: Phone, text: "+91-9920074439", href: "tel:+919920074439", label: "Call phone" },
+    { icon: MessageCircle, text: "WhatsApp", href: "https://wa.me/919920074439", label: "Chat on WhatsApp", external: true },
     { icon: Mail, text: "sateesh.singh76@gmail.com", href: "mailto:sateesh.singh76@gmail.com", label: "Send email" },
     { icon: MapPin, text: "Mumbai, Maharashtra, India", href: null, label: "Location" },
   ];
+
 
   const socialLinks = [
     { icon: Linkedin, href: "https://www.linkedin.com/in/sateesh-singh-2224b666/", label: "LinkedIn profile" },
