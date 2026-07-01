@@ -98,9 +98,15 @@ const HeroSection = () => {
               <div key={index} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <item.icon className="w-4 h-4 text-primary" aria-hidden="true" />
                 {item.href ? (
-                  <a href={item.href} className="text-sm md:text-base hover:underline underline-offset-4" aria-label={item.label}>
+                  <a
+                    href={item.href}
+                    className="text-sm md:text-base hover:underline underline-offset-4"
+                    aria-label={item.label}
+                    {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
                     {item.text}
                   </a>
+
                 ) : (
                   <span className="text-sm md:text-base">{item.text}</span>
                 )}
