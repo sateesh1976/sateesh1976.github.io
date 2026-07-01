@@ -10,10 +10,18 @@ function buildCorsHeaders(origin: string | null): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type",
+      "authorization, x-client-info, apikey, content-type, x-edge-secret",
     "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
     "Vary": "Origin",
   };
+}
+
+// Constant-time-ish string compare
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }
 
 Deno.serve(async (req) => {
@@ -24,7 +32,17 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  // Restrict to known origins to prevent third-party abuse of the API key.
+  // Require shared secret header (in addition to origin check) to block
+  // origin-spoofed non-browser clients from draining ElevenLabs credits.
+  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
+  const providedSecret = req.headers.get("x-edge-secret") ?? "";
+  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,

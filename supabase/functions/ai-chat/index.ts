@@ -20,12 +20,20 @@ function cors(origin: string | null): Record<string, string> {
   const allowed = isAllowedOrigin(origin) ? (origin as string) : "https://sateeshsingh.lovable.app";
   return {
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-edge-secret",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
 }
+
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 
 const SYSTEM_PROMPT = `You are SKS Assistant, a friendly and professional AI assistant for Sateesh Kumar Singh's portfolio website.
 
@@ -81,6 +89,16 @@ Deno.serve(async (req) => {
   const corsHeaders = cors(origin);
 
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
+  const providedSecret = req.headers.get("x-edge-secret") ?? "";
+  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   if (!isAllowedOrigin(origin)) {
     console.warn("ai-chat blocked origin", origin);
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -88,6 +106,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
 
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -129,7 +148,7 @@ Deno.serve(async (req) => {
       const text = await upstream.text();
       console.error("Gateway error", upstream.status, text);
       const status = upstream.status === 402 || upstream.status === 429 ? upstream.status : 502;
-      return new Response(JSON.stringify({ error: "AI request failed", status, detail: text.slice(0, 500) }), {
+      return new Response(JSON.stringify({ error: "AI request failed", status }), {
         status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

@@ -104,12 +104,14 @@ const AssistantPage = () => {
             "Content-Type": "application/json",
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            "x-edge-secret": import.meta.env.VITE_EDGE_SHARED_SECRET ?? "",
           },
           body: JSON.stringify({
             messages: history.map((m) => ({ role: m.role, content: m.content })),
           }),
           signal: controller.signal,
         });
+
 
         if (!res.ok || !res.body) {
           const body = await res.text().catch(() => "");
@@ -454,7 +456,10 @@ const VoicePanelInner = () => {
     setConnecting(true);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const { data, error } = await supabase.functions.invoke("elevenlabs-token");
+      const { data, error } = await supabase.functions.invoke("elevenlabs-token", {
+        headers: { "x-edge-secret": import.meta.env.VITE_EDGE_SHARED_SECRET ?? "" },
+      });
+
       if (error || !data?.token) throw new Error("Unable to start voice chat right now.");
       await conversation.startSession({
         conversationToken: data.token,
