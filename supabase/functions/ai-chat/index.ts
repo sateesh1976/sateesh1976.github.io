@@ -148,7 +148,7 @@ Deno.serve(async (req) => {
       const text = await upstream.text();
       console.error("Gateway error", upstream.status, text);
       const status = upstream.status === 402 || upstream.status === 429 ? upstream.status : 502;
-      return new Response(JSON.stringify({ error: "AI request failed", status, detail: text.slice(0, 500) }), {
+      return new Response(JSON.stringify({ error: "AI request failed", status }), {
         status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
