@@ -26,25 +26,31 @@ const NewsletterSubscribe = () => {
     };
     console.info("[newsletter] subscribe", payload);
     try {
-      // Prefer POST + JSON. n8n webhooks may not send CORS headers; if the
-      // preflight/response is opaque we still consider the request delivered.
+      const qs = new URLSearchParams({
+        action: payload.action,
+        email: payload.email,
+        timestamp: payload.timestamp,
+      }).toString();
+      const url = `${NEWSLETTER_URL}?${qs}`;
+
+      // Try GET first (n8n webhook is registered as GET). Fall back to POST,
+      // then no-cors POST if CORS blocks the browser from reading a response.
       try {
-        const res = await fetch(NEWSLETTER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error(`Subscription failed (${res.status})`);
-      } catch (corsOrNet) {
-        console.warn("[newsletter] POST failed, retrying no-cors", corsOrNet);
-        // Fire-and-forget delivery so the webhook still triggers even if
-        // the browser can't read the response due to CORS.
-        await fetch(NEWSLETTER_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const res = await fetch(url, { method: "GET" });
+        if (!res.ok) throw new Error(`GET failed (${res.status})`);
+      } catch (getErr) {
+        console.warn("[newsletter] GET failed, trying POST", getErr);
+        try {
+          const res = await fetch(NEWSLETTER_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error(`POST failed (${res.status})`);
+        } catch (postErr) {
+          console.warn("[newsletter] POST failed, sending no-cors", postErr);
+          await fetch(url, { method: "GET", mode: "no-cors" });
+        }
       }
       setStatus("success");
       toast.success("Subscribed! Check your inbox for upcoming editions.");
@@ -55,6 +61,7 @@ const NewsletterSubscribe = () => {
       toast.error(err instanceof Error ? err.message : "Subscription failed. Please try again.");
     }
   };
+
 
   return (
     <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8">
