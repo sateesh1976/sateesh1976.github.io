@@ -26,19 +26,26 @@ const NewsletterSubscribe = () => {
     };
     console.info("[newsletter] subscribe", payload);
     try {
-      // Prefer POST + JSON for consistency with the unsubscribe action.
-      let res = await fetch(NEWSLETTER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        // Backward-compat GET fallback (existing webhook behaviour).
-        res = await fetch(`${NEWSLETTER_URL}?email=${encodeURIComponent(parsed.data)}&action=subscribe`, {
-          method: "GET",
+      // Prefer POST + JSON. n8n webhooks may not send CORS headers; if the
+      // preflight/response is opaque we still consider the request delivered.
+      try {
+        const res = await fetch(NEWSLETTER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(`Subscription failed (${res.status})`);
+      } catch (corsOrNet) {
+        console.warn("[newsletter] POST failed, retrying no-cors", corsOrNet);
+        // Fire-and-forget delivery so the webhook still triggers even if
+        // the browser can't read the response due to CORS.
+        await fetch(NEWSLETTER_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
         });
       }
-      if (!res.ok) throw new Error(`Subscription failed (${res.status})`);
       setStatus("success");
       toast.success("Subscribed! Check your inbox for upcoming editions.");
       setEmail("");
