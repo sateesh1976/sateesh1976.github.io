@@ -20,7 +20,7 @@ function cors(origin: string | null): Record<string, string> {
   const allowed = isAllowedOrigin(origin) ? (origin as string) : "https://sateeshsingh.lovable.app";
   return {
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-edge-secret",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
