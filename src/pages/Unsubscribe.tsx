@@ -39,55 +39,40 @@ const Unsubscribe = () => {
     setMessage("");
     console.info("[unsubscribe] sending webhook", { url: NEWSLETTER_WEBHOOK, payload });
 
-    // Primary attempt: POST with JSON body (preferred by n8n).
+    // n8n webhook is registered as GET; try that first, then POST fallbacks.
     try {
-      const res = await fetch(NEWSLETTER_WEBHOOK, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
-      });
-      console.info("[unsubscribe] POST status", res.status);
-      if (res.ok) {
-        setStatus("success");
-        setMessage("You have been unsubscribed. Sorry to see you go!");
-        return;
-      }
-      // Fall through to GET fallback on non-2xx
-      throw new Error(`POST failed (${res.status})`);
-    } catch (postErr) {
-      console.warn("[unsubscribe] POST failed, trying GET fallback", postErr);
+      const qs = new URLSearchParams({
+        action: payload.action,
+        email: payload.email,
+        timestamp: payload.timestamp,
+      }).toString();
+      const getUrl = `${NEWSLETTER_WEBHOOK}?${qs}`;
       try {
-        const qs = new URLSearchParams({
-          action: payload.action,
-          email: payload.email,
-          timestamp: payload.timestamp,
-        }).toString();
-        const res = await fetch(`${NEWSLETTER_WEBHOOK}?${qs}`, { method: "GET" });
-        console.info("[unsubscribe] GET status", res.status);
+        const res = await fetch(getUrl, { method: "GET" });
         if (!res.ok) throw new Error(`GET failed (${res.status})`);
-        setStatus("success");
-        setMessage("You have been unsubscribed. Sorry to see you go!");
       } catch (getErr) {
-        console.error("[unsubscribe] both attempts failed", getErr);
-        // Last resort: opaque no-cors POST so the webhook still fires
-        // even if CORS strips the response.
+        console.warn("[unsubscribe] GET failed, trying POST", getErr);
         try {
-          await fetch(NEWSLETTER_WEBHOOK, {
+          const res = await fetch(NEWSLETTER_WEBHOOK, {
             method: "POST",
-            mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
-          setStatus("success");
-          setMessage("Unsubscribe request submitted. You'll be removed shortly.");
-        } catch (finalErr) {
-          console.error("[unsubscribe] no-cors fallback failed", finalErr);
-          setStatus("error");
-          setMessage("Could not process your request. Please email us to unsubscribe.");
+          if (!res.ok) throw new Error(`POST failed (${res.status})`);
+        } catch (postErr) {
+          console.warn("[unsubscribe] POST failed, sending no-cors", postErr);
+          await fetch(getUrl, { method: "GET", mode: "no-cors" });
         }
       }
+      setStatus("success");
+      setMessage("You have been unsubscribed. Sorry to see you go!");
+    } catch (finalErr) {
+      console.error("[unsubscribe] all attempts failed", finalErr);
+      setStatus("error");
+      setMessage("Could not process your request. Please email us to unsubscribe.");
     }
   };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
