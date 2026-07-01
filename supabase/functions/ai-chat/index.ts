@@ -89,6 +89,16 @@ Deno.serve(async (req) => {
   const corsHeaders = cors(origin);
 
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
+  const providedSecret = req.headers.get("x-edge-secret") ?? "";
+  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   if (!isAllowedOrigin(origin)) {
     console.warn("ai-chat blocked origin", origin);
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -96,6 +106,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
 
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
