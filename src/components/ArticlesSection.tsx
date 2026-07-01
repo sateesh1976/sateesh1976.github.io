@@ -140,9 +140,8 @@ const ArticlesSection = () => {
             </>
           )}
 
-          <div className="mt-10">
-            <NewsletterSubscribe />
-          </div>
+
+
         </div>
       </div>
     </section>
