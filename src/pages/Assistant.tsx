@@ -104,12 +104,14 @@ const AssistantPage = () => {
             "Content-Type": "application/json",
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            "x-edge-secret": import.meta.env.VITE_EDGE_SHARED_SECRET ?? "",
           },
           body: JSON.stringify({
             messages: history.map((m) => ({ role: m.role, content: m.content })),
           }),
           signal: controller.signal,
         });
+
 
         if (!res.ok || !res.body) {
           const body = await res.text().catch(() => "");
