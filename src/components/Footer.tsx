@@ -35,7 +35,12 @@ const Footer = () => {
       <h2 id="footer-heading" className="sr-only">Site footer</h2>
 
       <div className="section-container py-14 lg:py-16">
+        <div className="mb-10 lg:mb-12">
+          <NewsletterSubscribe />
+        </div>
+
         <div className="grid gap-10 lg:gap-12 lg:grid-cols-12">
+
           {/* Brand + identity */}
           <div className="lg:col-span-4">
             <Link
