@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Linkedin, Github, Download, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
-import profileAsset from "@/assets/sateesh-profile.jpg.asset.json";
+
+const PROFILE_IMG = `${import.meta.env.BASE_URL}images/sateesh-profile.jpg`;
 
 const HeroSection = () => {
   const contactItems = [
@@ -39,7 +40,7 @@ const HeroSection = () => {
             className="mx-auto mb-6 w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl bg-secondary"
           >
             <img
-              src={profileAsset.url}
+              src={PROFILE_IMG}
               alt="Portrait of Sateesh Kumar Singh"
               width={352}
               height={352}

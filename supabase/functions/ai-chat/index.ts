@@ -7,6 +7,8 @@ const ORIGIN_ALLOW_PATTERNS: RegExp[] = [
   /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
   /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
   /^https:\/\/[a-z0-9-]+\.sandbox\.lovable\.dev$/,
+  /^https:\/\/sateesh1976\.github\.io$/,
+  /^https:\/\/[a-z0-9-]+\.github\.io$/,
   /^http:\/\/localhost(?::\d+)?$/,
   /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
 ];
