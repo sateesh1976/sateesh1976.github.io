@@ -1,12 +1,21 @@
-const ALLOWED_ORIGINS = [
-  "https://sateeshsingh.lovable.app",
-  "https://id-preview--2b82243b-b748-4001-a7ea-55cc3ab7bd6b.lovable.app",
-  "http://localhost:8080",
-  "http://localhost:5173",
+const ORIGIN_ALLOW_PATTERNS: RegExp[] = [
+  /^https:\/\/sateeshsingh\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/[a-z0-9-]+\.sandbox\.lovable\.dev$/,
+  /^https:\/\/sateesh1976\.github\.io$/,
+  /^https:\/\/[a-z0-9-]+\.github\.io$/,
+  /^http:\/\/localhost(?::\d+)?$/,
+  /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
 ];
 
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  return ORIGIN_ALLOW_PATTERNS.some((re) => re.test(origin));
+}
+
 function buildCorsHeaders(origin: string | null): Record<string, string> {
-  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowed = isAllowedOrigin(origin) ? (origin as string) : "https://sateeshsingh.lovable.app";
   return {
     "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -31,7 +40,7 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+  if (!isAllowedOrigin(origin)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

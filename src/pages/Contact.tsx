@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Linkedin, Github, Globe } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Globe, MessageCircle } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import SEO from "@/components/SEO";
 
@@ -39,6 +39,17 @@ const Contact = () => (
                 <li>
                   <a href="tel:+919920074439" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     <Phone className="w-4 h-4" aria-hidden="true" /> +91-9920074439
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://wa.me/919920074439"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                    aria-label="Chat on WhatsApp"
+                  >
+                    <MessageCircle className="w-4 h-4" aria-hidden="true" /> WhatsApp +91 9920074439
                   </a>
                 </li>
                 <li className="flex items-center gap-2 text-muted-foreground">
