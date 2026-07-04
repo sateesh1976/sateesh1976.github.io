@@ -66,19 +66,13 @@ const HeroSection = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-foreground font-medium mb-2"
-          >
-            Principal Consultant | Agentic AI Leader
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            className="text-base md:text-lg text-muted-foreground font-light mb-8"
+            className="text-base md:text-lg text-muted-foreground font-light mb-8 max-w-2xl mx-auto"
           >
-            AI, GenAI, Data Science &amp; Enterprise Architecture
+            AI, GenAI, Data Science &amp; Enterprise Architecture — 20+ years shipping
+            production-grade intelligent systems for banking, automotive, and healthcare.
           </motion.p>
+
 
 
           <motion.div
