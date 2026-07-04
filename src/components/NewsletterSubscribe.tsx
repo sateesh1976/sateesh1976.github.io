@@ -64,54 +64,74 @@ const NewsletterSubscribe = () => {
 
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8">
-      <div className="flex items-start gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-primary/10 text-primary">
-          <Mail className="w-5 h-5" aria-hidden="true" />
-        </div>
+    <section
+      aria-labelledby="newsletter-heading"
+      className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background p-6 sm:p-10 shadow-sm"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-primary/20 blur-3xl opacity-60"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-32 -left-16 w-72 h-72 rounded-full bg-primary/10 blur-3xl opacity-60"
+      />
+
+      <div className="relative grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
         <div>
-          <h3 className="text-lg font-semibold">Subscribe to my LinkedIn Newsletter</h3>
-          <p className="text-sm text-muted-foreground">Weekly insights on AI, ML, and enterprise data strategy.</p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium mb-3">
+            <Mail className="w-3.5 h-3.5" aria-hidden="true" />
+            LinkedIn Newsletter
+          </div>
+          <h3 id="newsletter-heading" className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Practical AI &amp; enterprise data, in your inbox.
+          </h3>
+          <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-xl">
+            Weekly insights on Generative AI, Agentic AI, MLOps, and building
+            production-grade intelligent systems. No spam, unsubscribe anytime.
+          </p>
+        </div>
+
+        <div>
+          {status === "success" ? (
+            <div
+              className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-primary"
+              role="status"
+              aria-live="polite"
+            >
+              <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
+              You're subscribed. Welcome aboard!
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2" noValidate>
+              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+              <input
+                id="newsletter-email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="flex-1 h-12 rounded-xl border border-input bg-background px-4 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                disabled={status === "loading"}
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="h-12 px-6 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center justify-center gap-2 shadow-md shadow-primary/20"
+              >
+                {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : null}
+                {status === "loading" ? "Subscribing…" : "Subscribe"}
+              </button>
+            </form>
+          )}
+          <p className="mt-3 text-xs text-muted-foreground">
+            By subscribing you agree to receive email updates. Unsubscribe from any email.
+          </p>
         </div>
       </div>
-
-      {status === "success" ? (
-        <div
-          className="flex items-center gap-2 text-sm text-primary"
-          role="status"
-          aria-live="polite"
-        >
-          <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
-          You're subscribed. Welcome aboard!
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2" noValidate>
-          <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-          <input
-            id="newsletter-email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="flex-1 h-11 rounded-lg border border-input bg-background px-4 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            disabled={status === "loading"}
-          />
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="h-11 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center justify-center gap-2"
-          >
-            {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : null}
-            {status === "loading" ? "Subscribing…" : "Subscribe"}
-          </button>
-        </form>
-      )}
-      <p className="mt-3 text-xs text-muted-foreground">
-        You can unsubscribe at any time. We respect your inbox.
-      </p>
-    </div>
+    </section>
   );
 };
 
