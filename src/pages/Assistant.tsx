@@ -22,6 +22,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import SEO from "@/components/SEO";
 import { cn } from "@/lib/utils";
+import { ASSISTANT_SYSTEM_PROMPT } from "@/lib/knowledgeBase";
 
 type ChatMessage = { id: string; role: "user" | "assistant"; content: string; ts: number };
 
@@ -430,16 +431,52 @@ const AssistantPage = () => {
   );
 };
 
+const SILENCE_TIMEOUT_MS = 10_000;
+const VAD_ACTIVE_THRESHOLD = 0.35;
+
 const VoicePanelInner = () => {
   const [connecting, setConnecting] = useState(false);
+  const silenceTimerRef = useRef<number | null>(null);
+  const endedByTimeoutRef = useRef(false);
+
+  const clearSilenceTimer = () => {
+    if (silenceTimerRef.current !== null) {
+      window.clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  };
+
   const conversation = useConversation({
+    // Steer the ElevenLabs agent with the same knowledge base the text
+    // assistant uses, so answers stay accurate and on-topic. Requires the
+    // agent to have "Overrides > Prompt" and "First message" enabled in
+    // the ElevenLabs dashboard.
+    overrides: {
+      agent: {
+        prompt: { prompt: ASSISTANT_SYSTEM_PROMPT },
+        firstMessage:
+          "Hi, I'm Sateesh's assistant. Ask me anything about his experience, projects, or skills.",
+        language: "en",
+      },
+    },
     onConnect: () => {
       setConnecting(false);
+      endedByTimeoutRef.current = false;
       toast({ title: "Voice connected" });
     },
-    onDisconnect: () => setConnecting(false),
+    onDisconnect: () => {
+      setConnecting(false);
+      clearSilenceTimer();
+      if (endedByTimeoutRef.current) {
+        toast({
+          title: "Conversation ended",
+          description: "Ended after 10 seconds of silence.",
+        });
+      }
+    },
     onError: (e) => {
       console.error("Voice error", e);
+      clearSilenceTimer();
       toast({
         title: "Voice assistant error",
         description: "Please try again in a moment.",
@@ -450,6 +487,46 @@ const VoicePanelInner = () => {
   });
 
   const isConnected = conversation.status === "connected";
+
+  // Auto-end after prolonged silence. We reset the timer whenever the user
+  // is detected speaking (VAD score) or the assistant is speaking.
+  const armSilenceTimer = useCallback(() => {
+    clearSilenceTimer();
+    silenceTimerRef.current = window.setTimeout(() => {
+      endedByTimeoutRef.current = true;
+      void conversation.endSession();
+    }, SILENCE_TIMEOUT_MS);
+  }, [conversation]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      clearSilenceTimer();
+      return;
+    }
+    armSilenceTimer();
+    // Poll the VAD score / speaking state as the AI SDK exposes them
+    // imperatively rather than via callback props on every release.
+    const iv = window.setInterval(() => {
+      try {
+        const vad =
+          typeof (conversation as unknown as { getInputVolume?: () => number })
+            .getInputVolume === "function"
+            ? (conversation as unknown as { getInputVolume: () => number }).getInputVolume()
+            : 0;
+        if (conversation.isSpeaking || vad > VAD_ACTIVE_THRESHOLD) {
+          armSilenceTimer();
+        }
+      } catch {
+        // ignore transient SDK errors
+      }
+    }, 500);
+    return () => {
+      window.clearInterval(iv);
+      clearSilenceTimer();
+    };
+  }, [isConnected, conversation, armSilenceTimer]);
+
+  useEffect(() => () => clearSilenceTimer(), []);
 
   const start = useCallback(async () => {
     setConnecting(true);
@@ -477,12 +554,15 @@ const VoicePanelInner = () => {
     }
   }, [conversation]);
 
-  const stop = useCallback(() => conversation.endSession(), [conversation]);
+  const stop = useCallback(() => {
+    endedByTimeoutRef.current = false;
+    void conversation.endSession();
+  }, [conversation]);
 
   const status = isConnected
     ? conversation.isSpeaking
       ? "Assistant is speaking…"
-      : "Listening… speak naturally."
+      : "Listening… speak naturally. Session ends after 10s of silence."
     : connecting
     ? "Connecting…"
     : "Tap the mic to start a voice conversation.";
@@ -520,7 +600,8 @@ const VoicePanelInner = () => {
       <h2 className="text-lg font-semibold mb-1">Voice Conversation</h2>
       <p className="text-sm text-muted-foreground max-w-md">{status}</p>
       <p className="text-xs text-muted-foreground mt-6 max-w-md">
-        Powered by ElevenLabs. Your microphone is only used while a session is active.
+        Powered by ElevenLabs. Your microphone is only used while a session is active,
+        and the call automatically ends after 10 seconds of silence.
       </p>
     </div>
   );
