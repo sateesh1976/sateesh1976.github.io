@@ -1,0 +1,21 @@
+# Sateesh Kumar Singh
+
+> Principal Consultant and Agentic AI Leader with 20+ years across AI/ML, Generative AI, IBM Cloud Pak for Data, cloud platforms (Azure, AWS, GCP), data engineering, and enterprise architecture.
+
+Portfolio site for Sateesh Kumar Singh. Covers professional background, consulting engagements through AgenticAI Lab, technical skills, featured projects, published articles, and contact details.
+
+## Pages
+
+- [Home](/): Overview, professional summary, and highlights.
+- [About](/about): Background, approach, and consulting focus.
+- [Experience](/experience): Career timeline and roles.
+- [Projects](/projects): Featured projects and case studies across AI, GenAI, and cloud.
+- [Skills](/skills): Technical skills grouped by category.
+- [Articles](/articles): LinkedIn articles on AI, ML, and enterprise data strategy.
+- [Resume](/resume): Resume highlights and downloadable PDF.
+- [Contact](/contact): Contact form, email, WhatsApp, and location.
+- [Assistant](/assistant): AI assistant (text and voice) that answers questions about Sateesh.
+
+## Optional
+
+- [Unsubscribe](/unsubscribe): Newsletter unsubscribe form.
