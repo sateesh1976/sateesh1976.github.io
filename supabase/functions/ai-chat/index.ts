@@ -110,15 +110,7 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const { messages, secret } = body ?? {};
-
-    const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
-    if (!sharedSecret || typeof secret !== "string" || !safeEqual(secret, sharedSecret)) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const { messages } = body ?? {};
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages required" }), {

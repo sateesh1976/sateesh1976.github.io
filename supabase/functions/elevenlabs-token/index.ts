@@ -47,17 +47,9 @@ Deno.serve(async (req) => {
     });
   }
 
-  // Shared-secret verification via request body (avoids CORS preflight
-  // issues with custom headers behind the Supabase edge gateway).
-  const body = await req.json().catch(() => ({}));
-  const sharedSecret = Deno.env.get("EDGE_SHARED_SECRET");
-  const providedSecret = typeof body?.secret === "string" ? body.secret : "";
-  if (!sharedSecret || !safeEqual(providedSecret, sharedSecret)) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  // Authentication relies on the Supabase gateway JWT + Origin allowlist.
+  // (Previously a shared secret was passed here but that leaked into the
+  // client bundle via a VITE_ env var, so it has been removed.)
 
 
   try {
