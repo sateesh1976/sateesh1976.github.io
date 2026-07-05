@@ -17,7 +17,7 @@ const ArticlesPage = lazy(() => import("./pages/ArticlesPage"));
 const ResumePage = lazy(() => import("./pages/ResumePage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
-const Assistant = lazy(() => import("./pages/Assistant"));
+
 
 const queryClient = new QueryClient();
 
