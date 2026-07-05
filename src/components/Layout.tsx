@@ -49,7 +49,7 @@ const Layout = () => {
 
       <Footer />
       <BackToTop />
-      <AssistantLauncher />
+      
     </div>
   );
 };
