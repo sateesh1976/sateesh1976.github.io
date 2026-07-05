@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import BackToTop from "./BackToTop";
-import AssistantLauncher from "./AssistantLauncher";
+
 
 const PageFallback = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
