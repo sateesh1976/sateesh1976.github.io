@@ -13,7 +13,7 @@ const navItems = [
   { label: "Skills", to: "/skills" },
   { label: "Articles", to: "/articles" },
   { label: "Resume", to: "/resume" },
-  { label: "Assistant", to: "/assistant" },
+  
   { label: "Contact", to: "/contact" },
 ];
 
