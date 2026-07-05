@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import SEO from "@/components/SEO";
 
 // Register the ElevenLabs custom element for TypeScript/JSX.
@@ -20,36 +19,30 @@ const AssistantPage = () => {
     <>
       <SEO
         title="AI Assistant | Sateesh Kumar Singh"
-        description="Chat with Sateesh's AI assistant. Ask about his experience, skills, projects, and how to get in touch."
+        description="Talk or chat with Sateesh's AI assistant instantly."
         path="/assistant"
       />
 
-      <section className="section-container py-10 md:py-16">
-        <header className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-3">
-            <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-            AI Assistant
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-            Chat with <span className="gradient-text">SKS Assistant</span>
-          </h1>
-          <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-            Ask anything about Sateesh's background, projects, or skills — powered by ElevenLabs Conversational AI.
-          </p>
-        </header>
+      <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 md:py-20 bg-gradient-to-b from-background via-background to-muted/30">
+        <div className="w-full max-w-2xl mx-auto">
+          <header className="text-center mb-8 md:mb-10">
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+              AI Assistant
+            </h1>
+            <p className="text-sm md:text-base text-muted-foreground mt-2">
+              Talk or chat with your AI assistant instantly.
+            </p>
+          </header>
 
-        <div className="max-w-3xl mx-auto glass-card p-4 md:p-8">
-          <div
-            className="w-full flex items-center justify-center min-h-[500px]"
-            aria-label="ElevenLabs conversational AI widget"
-          >
-            <elevenlabs-convai agent-id={AGENT_ID}></elevenlabs-convai>
+          <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-xl shadow-primary/5 p-6 md:p-10">
+            <div
+              className="w-full flex items-center justify-center min-h-[420px] md:min-h-[500px]"
+              aria-label="AI assistant widget"
+            >
+              <elevenlabs-convai agent-id={AGENT_ID}></elevenlabs-convai>
+            </div>
           </div>
         </div>
-
-        <p className="text-xs text-muted-foreground mt-6 max-w-2xl mx-auto text-center">
-          Powered by ElevenLabs. Your microphone is only used while a session is active.
-        </p>
       </section>
     </>
   );
