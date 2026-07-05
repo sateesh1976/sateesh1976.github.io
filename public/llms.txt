@@ -14,7 +14,6 @@ Portfolio site for Sateesh Kumar Singh. Covers professional background, consulti
 - [Articles](/articles): LinkedIn articles on AI, ML, and enterprise data strategy.
 - [Resume](/resume): Resume highlights and downloadable PDF.
 - [Contact](/contact): Contact form, email, WhatsApp, and location.
-- [Assistant](/assistant): AI assistant (text and voice) that answers questions about Sateesh.
 
 ## Optional
 
