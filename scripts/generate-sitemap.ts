@@ -23,7 +23,7 @@ const entries: SitemapEntry[] = [
   { path: "/articles", changefreq: "weekly", priority: "0.7", lastmod: today },
   { path: "/resume", changefreq: "monthly", priority: "0.6", lastmod: today },
   { path: "/contact", changefreq: "yearly", priority: "0.6", lastmod: today },
-  { path: "/assistant", changefreq: "monthly", priority: "0.5", lastmod: today },
+  
   { path: "/unsubscribe", changefreq: "yearly", priority: "0.3", lastmod: today },
 ];
 
