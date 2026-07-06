@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import BackToTop from "./BackToTop";
+import FeedbackButton from "./FeedbackButton";
 
 
 const PageFallback = () => (
@@ -49,7 +50,7 @@ const Layout = () => {
 
       <Footer />
       <BackToTop />
-      
+      <FeedbackButton />
     </div>
   );
 };
