@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -47,5 +47,17 @@ jobs:
           path: dist
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deployment-primary
+        continue-on-error: true
         uses: actions/deploy-pages@v5
+
+      - name: Retry GitHub Pages deployment
+        id: deployment-retry
+        if: steps.deployment-primary.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+
+      - name: Resolve deployment URL
+        id: deployment
+        if: always()
+        run: |
+          echo "page_url=${{ steps.deployment-retry.outputs.page_url || steps.deployment-primary.outputs.page_url }}" >> "$GITHUB_OUTPUT"
