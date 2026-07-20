@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 
 const FEEDBACK_URL =
-  "https://livev.app.n8n.cloud/form/16562204-80e8-4ca0-82be-6151a9a49c62";
+  "https://liboro.app.n8n.cloud/form/200ca2ed-a99c-452b-8847-591fa3ee10fe";
 
 const FeedbackButton = () => {
   const [open, setOpen] = useState(false);
